@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_drawable_canvas import st_canvas
+import yoodle_backend
 import time
 import requests
 import json
@@ -54,8 +55,19 @@ lockBoard = False
 submit_button = None
 N = 20
 current_N = N
+YoodleV3 = yoodle_backend.MyModel()
+
+
+
+
+def printOutput(strings):
+    st.divider()
+    st.write(f"It is: {strings}")
+    st.divider()
+
 
 building = st.selectbox('Select Building', ['None', 'Building A', 'Building B', 'Building C'])
+
 
 if building is None or building == 'None':
     lockBoard = True
@@ -78,13 +90,13 @@ else:
            
             drawing_mode = "freedraw"
             stroke_width = 5
-            stroke_color = "#000000"
-            bg_color = "#FFFFFF"
+            stroke_color = "rgb(0, 0, 0)"
+            bg_color = "rgb(255, 255, 255)"
             realtime_update = True
 
             # Create a canvas component
             canvas_result = st_canvas(
-                fill_color="rgba(255, 255, 255, 1)",  
+                fill_color="rgb(255, 255, 255)",
                 stroke_width=stroke_width,
                 stroke_color=stroke_color,
                 background_color=bg_color,
@@ -104,12 +116,24 @@ else:
                 session_state.current_N = N
 
             # Do something interesting with the image data and paths
-            if canvas_result.image_data is not None and canvas_result.json_data is not None:
+            if canvas_result.image_data is not None and canvas_result is not None:
                 isTimerOn = TimerStates[1]
+                
+                
+            
 
                 if submit_button is None and (20 - session_state.current_N) >= 5:
                     submit_button = st.button('Submit')
                     print(session_state.current_N)
+                # Send drawing data to the Flask server for prediction
+                if submit_button:
+                    building = 'None'
+                    drawing_data = canvas_result.image_data
+                    response = YoodleV3.classify(drawing_data, building)
+
+                    st.write("Drawing submitted!")
+                    printOutput(response)
+                    st.image(canvas_result.image_data)
 
                 if isTimerOn:
                     for secs in range(session_state.current_N, -1, -1):
@@ -124,28 +148,18 @@ else:
                         print("Locked")
 
                         drawing_data = canvas_result.image_data
-                        response = requests.post('http://localhost:5000/predict', json={'drawing_data': drawing_data, 'building': building})
-                        prediction = response.json()['predicted_label']
+                        response = YoodleV3.classify(drawing_data, building)
+                        printOutput(response)
+
                 elif session_state.current_N % 5 == 0:
                     isTimerOn = TimerStates[1]
                     print(f"np{N},{isTimerOn}")
 
                     drawing_data = canvas_result.image_data
-                    response = requests.post('http://localhost:5000/predict', json={'drawing_data': drawing_data, 'building': building})
-                    prediction = response.json()['predicted_label']
-
-                # Send drawing data to the Flask server for prediction
-
-            if submit_button:
-                print("fhg")
-                
-                drawing_data = json.dumps(canvas_result.json_data)
-                response = requests.post('http://localhost:5000/predict', json={'drawing_data': drawing_data, 'building': building})
-                prediction = response.json()['predicted_label']
-
-                st.write("Drawing submitted!")
-                st.write("Predicted Label:", prediction)
-                st.image(canvas_result.image_data)
+                    response = YoodleV3.classify(drawing_data, building)
+                    printOutput(response)
 
     else:
         building = 'None'
+
+

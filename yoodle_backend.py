@@ -7,7 +7,7 @@ import cv2
 
 class MyModel:
     def __init__(self):
-        self.model = tf.keras.models.load_model("yoodle\model\yoodle_1.h5")
+        self.model = tf.keras.models.load_model("yoodle/model/yoodle_1.h5")
 
 
     def classify(self, img, label):

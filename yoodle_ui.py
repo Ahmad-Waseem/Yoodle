@@ -5,68 +5,70 @@ import time
 import requests
 import json
 
+YoodleV3 = yoodle_backend.MyModel()
+
+st.set_page_config(page_title="Yoodle - AI Buildings classifier", page_icon="🎨", layout="wide")
+
+page_bg_img = '''
+
+<style>
+[data-testid="stAppViewBlockContainer"]
+    {
+        background-image: url("https://raw.githubusercontent.com/Ahmad-Waseem/Yoodle/main/yoodle/Assets/toppng.com-jpg-black-and-white-istanbul-royalty-colorful-buildings-drawings-3001x1957.png");
+        background-size: cover;
+        padding-top: 1;
+    }
+</style>
+'''
+
+
+# Sidebar
+st.sidebar.title("Yoodle V2")
+st.sidebar.markdown(
+    """
+    ## Introduction
+    Welcome to the Yoodle App! This app uses an AI model to classify buildings based on their features.
+
+    ## Model Description
+    Our model is trained on a large dataset of Augmented  images. It leverages deep learning techniques to predict the Famous Landmarks.
+
+    ## Parameters
+    - **Image Input**: Draw the doodle yourself!!.
+
+    ## How to Use
+    1. Select the Landmark name from DropDown
+    2. Draw doodle under 20 second
+    3. Click the "Predict" button to get the building classification.
+    4. See if model gives you correct image
+
+    Enjoy exploring Yoodle!
+    """
+)
+
+labels = ['Badshahi Mosque', 'Big Ben', 'Burj Khalifa', 'Burj ul Arab', 'Chrysler Building', 'Cologne Cathedral', 'Colosseum of Rome', 'Easter Island', 'Eiffel Tower', 'Future Museum', 'Taj Mahal']
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
+
+st.title("Yoodle!!")
+
+def printOutput(num):
+    st.divider()
+    st.write(f"It is: {labels[num[0]]}")
+    st.divider()
 
 def main():
-
-    st.set_page_config(page_title="Yoodle - AI Buildings classifier", page_icon="🎨", layout="wide")
-
-    page_bg_img = '''
-
-    <style>
-    [data-testid="stAppViewBlockContainer"]
-        {
-            background-image: url("https://raw.githubusercontent.com/Ahmad-Waseem/Yoodle/main/yoodle/Assets/toppng.com-jpg-black-and-white-istanbul-royalty-colorful-buildings-drawings-3001x1957.png");
-            background-size: cover;
-            padding-top: 1;
-        }
-    </style>
-    '''
-
-
-    # Sidebar
-    st.sidebar.title("Yoodle V2")
-    st.sidebar.markdown(
-        """
-        ## Introduction
-        Welcome to the Yoodle App! This app uses an AI model to classify buildings based on their features.
-
-        ## Model Description
-        Our model is trained on a large dataset of Augmented  images. It leverages deep learning techniques to predict the Famous Landmarks.
-
-        ## Parameters
-        - **Image Input**: Draw the doodle yourself!!.
-
-        ## How to Use
-        1. Select the Landmark name from DropDown
-        2. Draw doodle under 20 second
-        3. Click the "Predict" button to get the building classification.
-        4. See if model gives you correct image
-
-        Enjoy exploring Yoodle!
-        """
-    )
-
-
-    st.markdown(page_bg_img, unsafe_allow_html=True)
-
-    st.title("Yoodle!!")
     # Dropdown menu for building selection
     lockBoard = False
     submit_button = None
     N = 20
     current_N = N
-    YoodleV3 = yoodle_backend.MyModel()
 
 
 
 
-    def printOutput(strings):
-        st.divider()
-        st.write(f"It is: {strings}")
-        st.divider()
 
-
-    building = st.selectbox('Select Building', ['None', 'Building A', 'Building B', 'Building C'])
+    labels = ['Badshahi Mosque', 'Big Ben', 'Burj Khalifa', 'Burj ul Arab', 'Chrysler Building', 'Cologne Cathedral', 'Colosseum of Rome', 'Easter Island', 'Eiffel Tower', 'Future Museum', 'Taj Mahal']
+    building = st.selectbox('Select Building', ['None', 'Badshahi Mosque', 'Big Ben', 'Burj Khalifa', 'Burj ul Arab', 'Chrysler Building', 'Cologne Cathedral', 'Colosseum of Rome', 'Easter Island', 'Eiffel Tower', 'Future Museum', 'Taj Mahal'])
 
 
     if building is None or building == 'None':
@@ -151,13 +153,13 @@ def main():
                             response = YoodleV3.classify(drawing_data, building)
                             printOutput(response)
 
-                    elif session_state.current_N % 5 == 0:
-                        isTimerOn = TimerStates[1]
-                        print(f"np{N},{isTimerOn}")
+                    # elif session_state.current_N % 5 == 0:
+                    #     isTimerOn = TimerStates[1]
+                    #     print(f"np{N},{isTimerOn}")
 
-                        drawing_data = canvas_result.image_data
-                        response = YoodleV3.classify(drawing_data, building)
-                        printOutput(response)
+                    #     drawing_data = canvas_result.image_data
+                    #     response = YoodleV3.classify(drawing_data, building)
+                    #     printOutput(response)
 
         else:
             building = 'None'

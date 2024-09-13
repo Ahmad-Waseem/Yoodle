@@ -1,0 +1,1 @@
+here are different .ipynb that give good results on least dataset. Datase--prepared would have to be Converted in zip. Else, use Raw dataset to Generates using DataPrep.ipynb, then use Yoodle{i}.ipynb for training

@@ -1,7 +1,7 @@
 # Yoodle
 A Buildings Doodle Classifier!!
 
-Yes, added a dropdown to select a building, merely for data collection for the AI. Model will learn if image is different from selected, thus getting better and better
+**Yes, added a dropdown to select a building, merely for data collection for the AI**. Model will learn if image is different from selected, thus getting better and better
 Working on the deployment!!
 
 

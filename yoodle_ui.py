@@ -20,15 +20,15 @@ st.set_page_config(page_title="Yoodle - AI Buildings classifier", page_icon="�
 page_bg_img = f'''
 <style>
 [data-testid="stAppViewBlockContainer"] {{
-    background-image: url("https://raw.githubusercontent.com/Ahmad-Waseem/Yoodle/main/yoodle/Assets/toppng.com-jpg-black-and-white-istanbul-royalty-colorful-buildings-drawings-3001x1957.png");
+    background-image: url("https://raw.githubusercontent.com/Ahmad-Waseem/Yoodle/main/yoodle/Assets/background.png?raw=true");
     background-size: cover;
-    padding-top: 1;
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-attachment: scroll;
 }}
 .st-canvas-container > canvas {{
-    border: 2px solid black; /* Add a border for visual clarity */
-    max-width: 512px !important; /* Ensure it doesn't exceed the intended width */
-    max-height: 512px !important; /* Ensure it doesn't exceed the intended height */
-    width: 100% !important; /* Make it responsive within its container */
+    border: 2px solid red;
+    width: 100% !important; 
     height: auto !important;
 }}
 </style>
@@ -56,25 +56,50 @@ if 'canvas_key' not in st.session_state:
 
 # Output printer
 def printOutput(num):
-    st.divider()
-    st.write(f"It is: <span style='font-size: 24px; font-weight: bold;'>{labels[num[0]]}</span>", unsafe_allow_html=True)
-    st.divider()
+    st.write(
+    f"""
+    <div style='margin-top: 20px; margin-bottom: 20px;'>
+        It is <span style='font-size: 24px; font-weight: bold;'>{labels[num[0]]}!</span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+    )
 
 # Sidebar info
 st.sidebar.title("Yoodle V2")
 st.sidebar.markdown("""
 ## Introduction
-Welcome to the Yoodle App! This app uses an AI model to classify buildings based on their features.
+Welcome to the Yoodle! This app uses an AI model to classify buildings based on their features in Doodles!
 
 ## How to Use
-1. Select the Landmark name from DropDown
-2. Draw doodle under 25 seconds
-3. Click the "Predict Now (skip timer)" button to get the result
+1. Select the Landmark name from **DropDown** (Dropdown was intended for analytics, does not effects the output)
+2. Draw **doodle of that building** on canvas under **25 seconds**
+3. Click the "Predict Now (skip timer)" button to get the **result**
 4. See if model gives you correct image
-""")
+**-- Enjoy Exploring YOODLE!**
 
+## Model Description
+Our model is trained on a large dataset of Augmented  images. It leverages deep learning techniques to predict the Famous Landmarks.
+
+# **NOTICE**
+The mounted Model is smallest in size and arguably lacking of all the next Versions, due to deployment constraints
+
+## Parameters
+- **Image Input**: Draw the doodle!
+""")
+# CSS to make side bar open by default
+st.markdown(
+    """
+    <style>
+        [data-testid="stSidebar"] {
+
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 # Title
-st.title("Yoodle!!")
+st.title("Yoodle!! - Landmark's Doodle Classifier 🎨")
 
 # Select box
 building = st.selectbox(
@@ -100,7 +125,7 @@ if st.session_state.reset:
     st.session_state.reset = False
     # Force a reset of the canvas by changing its key
     st.session_state.canvas_key += 1
-    st.experimental_rerun()
+    st.rerun()
     
 if building != 'None':
     # Start timer once when dropdown changes from None
@@ -140,7 +165,7 @@ if building != 'None':
         if st.session_state.current_N > 0 and not st.session_state.prediction_done:
             for secs in range(st.session_state.current_N, -1, -1):
                 st.session_state.current_N = secs
-                ph.metric("Countdown", f"{secs:02d}s left")
+                ph.metric("⏳ Countdown", f"{secs:02d}s left")
                 time.sleep(1)
             if st.session_state.current_N <= 0 and not st.session_state.prediction_done:
                 if canvas_result.image_data is not None:

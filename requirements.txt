@@ -9,3 +9,4 @@ opencv-python==4.7.0.72
 streamlit==1.14.0
 streamlit-drawable-canvas==0.9.3
 tensorflow==2.15.0
+altair==4.2.0

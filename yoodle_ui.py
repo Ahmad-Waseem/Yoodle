@@ -20,7 +20,7 @@ st.set_page_config(page_title="Yoodle - AI Buildings classifier", page_icon="ðŸŽ
 page_bg_img = f'''
 <style>
 [data-testid="stAppViewBlockContainer"] {{
-    background-image: url("https://raw.githubusercontent.com/Ahmad-Waseem/Yoodle/main/yoodle/Assets/background.png?raw=true");
+    background-image: url("./yoodle/Assets/background.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;

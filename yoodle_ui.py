@@ -125,7 +125,7 @@ if st.session_state.reset:
     st.session_state.reset = False
     # Force a reset of the canvas by changing its key
     st.session_state.canvas_key += 1
-    st.rerun()
+    st.experimental_rerun()
     
 if building != 'None':
     # Start timer once when dropdown changes from None
